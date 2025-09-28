@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEPNotes - B.Tech Notes Sharing Platform under NEP2020</title>
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text: #333;
+            --text-light: #7f8c8d;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--secondary);
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+        }
+
+        .btn-accent:hover {
+            background: #c0392b;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Header Styles */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-menu a {
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        /* Features Section */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* Notes Section */
+        .notes-section {
+            background: #f5f7fa;
+        }
+
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .category-btn {
+            padding: 8px 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .note-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .note-image {
+            height: 160px;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+        }
+
+        .note-content {
+            padding: 20px;
+        }
+
+        .note-category {
+            display: inline-block;
+            padding: 3px 10px;
+            background: var(--light);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .note-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2980b9 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .upload-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .upload-section p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu, .auth-buttons {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1>NEP<span>Notes</span></h1>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#notes">Notes</a></li>
+                    <li><a href="#upload">Upload</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+            
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline">Login</a>
+                <a href="#" class="btn">Sign Up</a>
+            </div>
+            
+            <div class="mobile-menu-btn">☰</div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Share & Access B.Tech Notes Under NEP2020</h2>
+            <p>A comprehensive platform for engineering students to share, discover, and collaborate on academic notes aligned with the National Education Policy 2020 curriculum.</p>
+            <div class="hero-buttons">
+                <a href="#notes" class="btn">Browse Notes</a>
+                <a href="#upload" class="btn btn-accent">Upload Notes</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose NEPNotes?</h2>
+                <p>Our platform is specifically designed to support the NEP2020 curriculum with features that enhance your learning experience.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>NEP2020 Aligned</h3>
+                    <p>All notes are categorized according to the NEP2020 curriculum structure, ensuring relevance to your coursework.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Easy Search & Filter</h3>
+                    <p>Find exactly what you need with our advanced search and filtering options by subject, semester, and university.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Collaborative Learning</h3>
+                    <p>Connect with peers, form study groups, and collaborate on notes to enhance understanding.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Quality Ratings</h3>
+                    <p>Rate and review notes to help others identify the most helpful resources.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Access notes on any device, anytime, anywhere with our responsive design.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🆓</div>
+                    <h3>Completely Free</h3>
+                    <p>No subscription fees or hidden charges. Share and learn without any cost.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notes Section -->
+    <section class="section notes-section" id="notes">
+        <div class="container">
+            <div class="section-title">
+                <h2>Browse Notes by Category</h2>
+                <p>Discover high-quality notes shared by students and educators across various engineering disciplines.</p>
+            </div>
+            
+            <div class="category-filters">
+                <button class="category-btn active">All</button>
+                <button class="category-btn">Computer Science</button>
+                <button class="category-btn">Electronics</button>
+                <button class="category-btn">Mechanical</button>
+                <button class="category-btn">Civil</button>
+                <button class="category-btn">Mathematics</button>
+                <button class="category-btn">Physics</button>
+                <button class="category-btn">Chemistry</button>
+            </div>
+            
+            <div class="notes-grid">
+                <!-- Note Card 1 -->
+                <div class="note-card">
+                    <div class="note-image">
+                        <span>📊</span>
+                    </div>
+                    <div class="note-content">
+                        <span class="note-category">Computer Science</span>
+                        <h3 class="note-title">Data Structures & Algorithms</h3>
+                        <p>Complete notes covering arrays, linked lists, trees, graphs, and sorting algorithms.</p>
+                        <div class="note-meta">
+                            <span>Semester 3</span>
+                            <span>⭐ 4.8 (124)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Note Card 2 -->
+                <div class="note-card">
+                    <div class="note-image">
+                        <span>⚡</span>
+                    </div>
+                    <div class="note-content">
+                        <span class="note-category">Electronics</span>
+                        <h3 class="note-title">Digital Electronics</h3>
+                        <p>Comprehensive notes on logic gates, flip-flops, counters, and digital circuits.</p>
+                        <div class="note-meta">
+                            <span>Semester 2</span>
+                            <span>⭐ 4.5 (89)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Note Card 3 -->
+                <div class="note-card">
+                    <div class="note-image">
+                        <span>🌉</span>
+                    </div>
+                    <div class="note-content">
+                        <span class="note-category">Civil</span>
+                        <h3 class="note-title">Structural Analysis</h3>
+                        <p>Detailed notes on beams, trusses, frames, and structural design principles.</p>
+                        <div class="note-meta">
+                            <span>Semester 4</span>
+                            <span>⭐ 4.7 (67)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Note Card 4 -->
+                <div class="note-card">
+                    <div class="note-image">
+                        <span>🧮</span>
+                    </div>
+                    <div class="note-content">
+                        <span class="note-category">Mathematics</span>
+                        <h3 class="note-title">Linear Algebra</h3>
+                        <p>Complete notes on matrices, vector spaces, eigenvalues, and linear transformations.</p>
+                        <div class="note-meta">
+                            <span>Semester 1</span>
+                            <span>⭐ 4.6 (102)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="btn">View All Notes</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="section upload-section" id="upload">
+        <div class="container">
+            <h2>Contribute to the Community</h2>
+            <p>Share your notes with thousands of engineering students and help them succeed in their academic journey.</p>
+            <a href="#" class="btn btn-accent">Upload Your Notes</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>NEPNotes</h3>
+                    <p>A platform dedicated to helping engineering students succeed under the NEP2020 curriculum through collaborative learning.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#notes">Browse Notes</a></li>
+                        <li><a href="#upload">Upload Notes</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Computer Science</a></li>
+                        <li><a href="#">Electronics</a></li>
+                        <li><a href="#">Mechanical</a></li>
+                        <li><a href="#">Civil Engineering</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: madhurjyajyoti2@.com</li>
+                        <li>Phone: +91 9864464284</li>
+                        <li>Address: Dhemaji, Assam, India</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 NEPNotes. All rights reserved. | Designed for NEP2020 Curriculum</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple JavaScript for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category filter functionality
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // In a real implementation, this would filter the notes
+                });
+            });
+            
+            // Mobile menu toggle (basic implementation)
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navMenu = document.querySelector('.nav-menu');
+            const authButtons = document.querySelector('.auth-buttons');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                // Toggle display of menu and auth buttons
+                if (navMenu.style.display === 'flex') {
+                    navMenu.style.display = 'none';
+                    authButtons.style.display = 'none';
+                } else {
+                    navMenu.style.display = 'flex';
+                    authButtons.style.display = 'flex';
+                    navMenu.style.flexDirection = 'column';
+                    authButtons.style.flexDirection = 'column';
+                    navMenu.style.position = 'absolute';
+                    navMenu.style.top = '70px';
+                    navMenu.style.left = '0';
+                    navMenu.style.width = '100%';
+                    navMenu.style.background = 'white';
+                    navMenu.style.padding = '20px';
+                    navMenu.style.boxShadow = '0 5px 10px rgba(0,0,0,0.1)';
+                }
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
